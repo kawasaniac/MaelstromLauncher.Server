@@ -1,0 +1,11 @@
+*.cache
+*.lref
+*.vsidx
+*.vs/
+*.bin/
+*.obj/
+bin/
+obj/
+vs/
+*.cache
+*.cache
