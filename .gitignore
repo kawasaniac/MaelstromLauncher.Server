@@ -1,0 +1,6 @@
+*.cache
+*.lref
+*.vsidx
+*.vs/
+bin/
+obj/
