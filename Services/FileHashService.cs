@@ -1,6 +1,5 @@
 ﻿using MaelstromLauncher.Server.Globals;
 using System.Buffers;
-using System.IO;
 using System.Security.Cryptography;
 
 namespace MaelstromLauncher.Server.Services

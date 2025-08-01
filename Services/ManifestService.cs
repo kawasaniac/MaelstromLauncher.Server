@@ -1,8 +1,6 @@
 ﻿using MaelstromLauncher.Server.Globals;
 using MaelstromLauncher.Server.Models;
-using Microsoft.Extensions.Configuration;
 using System.Diagnostics;
-using System.IO;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;

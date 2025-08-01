@@ -15,7 +15,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("MaelstromLauncher.Server")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+18fba5f95f575862b99c0a2ffb9df12f5ff726b4")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e8b67ee5e78e911599fa984b9cc520304862a962")]
 [assembly: System.Reflection.AssemblyProductAttribute("MaelstromLauncher.Server")]
 [assembly: System.Reflection.AssemblyTitleAttribute("MaelstromLauncher.Server")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
