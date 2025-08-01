@@ -6,4 +6,6 @@
 *.obj/
 bin/
 obj/
+vs/
+*.cache
 *.cache
