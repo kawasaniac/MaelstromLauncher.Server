@@ -1,0 +1,1 @@
+[03/08/2025 19:32:29] [Manifest] [ERROR] Game directory does not exist: ./wwwroot/game-files

@@ -1,4 +1,6 @@
 using MaelstromLauncher.Server.Services;
+using Microsoft.Extensions.Options;
+using Microsoft.OpenApi.Models;
 
 namespace MaelstromLauncher.Server;
 
@@ -13,7 +15,10 @@ public class Program
         builder.Services.AddControllers();
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();
-        builder.Services.AddSwaggerGen();
+        builder.Services.AddSwaggerGen(c =>
+        {
+            c.SwaggerDoc("v1", new OpenApiInfo { Title = "Maelstrom Launcher Server API", Version = "v1" });
+        });
 
         builder.Services.AddScoped<ManifestService>();
         builder.Services.AddHostedService<FileWatcherService>();
