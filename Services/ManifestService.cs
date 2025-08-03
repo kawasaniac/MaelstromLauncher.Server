@@ -34,7 +34,7 @@ namespace MaelstromLauncher.Server.Services
             }
         }
 
-        public ManifestService(IConfiguration configuration)
+        public ManifestService(ConfigurationManager configuration)
         {
             GameDirectoryPath = configuration["GameDirectory:Path"] ?? "/opt/maelstrom-launcher/files";
             DataPath = configuration["DataDirectory:Path"] ?? "/var/lib/maelstrom-launcher/";

@@ -1,25 +1,47 @@
-var builder = WebApplication.CreateBuilder(args);
+using MaelstromLauncher.Server.Services;
 
-// Add services to the container.
+namespace MaelstromLauncher.Server;
 
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-
-var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+public class Program
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    public static void Main(string[] args)
+    {
+        var builder = WebApplication.CreateBuilder(args);
+
+        ValidateConfiguration(builder.Configuration);
+
+        builder.Services.AddControllers();
+        // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+        builder.Services.AddEndpointsApiExplorer();
+        builder.Services.AddSwaggerGen();
+
+        builder.Services.AddScoped<ManifestService>();
+        builder.Services.AddHostedService<FileWatcherService>();
+
+        var app = builder.Build();
+
+        // HTTP request pipeline.
+        if (app.Environment.IsDevelopment())
+        {
+            app.UseSwagger();
+            app.UseSwaggerUI();
+        }
+
+        app.UseHttpsRedirection();
+        app.UseAuthorization();
+        app.MapControllers();
+        app.Run();
+    }
+
+    static void ValidateConfiguration(ConfigurationManager configuration)
+    {
+        var requiredSettings = new[] { "GameDirectory:Path", "DataDirectory:Path", "Server:ServerUrl" };
+        foreach (var setting in requiredSettings)
+        {
+            if (string.IsNullOrEmpty(configuration[setting]))
+                throw new InvalidOperationException($"Required configuration {setting} is missing");
+        }
+    }
 }
 
-app.UseHttpsRedirection();
 
-app.UseAuthorization();
-
-app.MapControllers();
-
-app.Run();
