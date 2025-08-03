@@ -90,7 +90,7 @@ namespace MaelstromLauncher.Server.Services
 
             if (process.ExitCode != 0)
             {
-                var error = process.StandardOutput.ReadToEnd();
+                var error = process.StandardError.ReadToEnd();
                 LoggerService.Log(LogType.FILE_CHECKER, LogType.ERROR, $"Chmod failed for {path}: {error}");
             }
         }
@@ -125,8 +125,6 @@ namespace MaelstromLauncher.Server.Services
         public async Task RefreshManifestAsync()
         {
             LoggerService.Log(LogType.MANIFEST, LogType.INFORMATION, "Refreshing manifest from files...");
-            Manifest ??= await LoadManifestAsync();
-
             await EnsureManifestExistsAsync();
 
             var newManifest = new Manifest();
@@ -144,7 +142,7 @@ namespace MaelstromLauncher.Server.Services
 
             try
             {
-                await SaveManifestToFileDirectly();
+                await SaveManifestExplicitlyAsync();
                 LoggerService.Log(LogType.MANIFEST, LogType.INFORMATION, "Manifest refreshed successfully");
             }
             catch (Exception ex)
@@ -231,7 +229,7 @@ namespace MaelstromLauncher.Server.Services
         // Do not use it for anything except
         // CreateDefaultManifestAsync() and RefreshManifestAsync(). 
         //
-        private async Task SaveManifestToFileDirectly()
+        internal async Task SaveManifestExplicitlyAsync()
         {
             try
             {
@@ -272,7 +270,7 @@ namespace MaelstromLauncher.Server.Services
             }
 
             Manifest = defaultManifest;
-            await SaveManifestToFileDirectly();
+            await SaveManifestExplicitlyAsync();
 
             LoggerService.Log(LogType.MANIFEST, LogType.INFORMATION, $"Manifest created with {defaultManifest.Files.Count} entries");
             return defaultManifest;
@@ -290,7 +288,7 @@ namespace MaelstromLauncher.Server.Services
 
             if (Manifest == null)
             {
-                LoggerService.Log(LogType.MANIFEST, LogType.ERROR, "No manifest found, creating new one");
+                LoggerService.Log(LogType.MANIFEST, LogType.INFORMATION, "No manifest found, creating new one");
                 await CreateDefaultManifestAsync();
             }
 
