@@ -1,5 +1,6 @@
 ﻿using MaelstromLauncher.Server.Globals;
 using MaelstromLauncher.Server.Models;
+using System;
 using System.Diagnostics;
 using System.Text;
 using System.Text.Json;
@@ -15,7 +16,26 @@ namespace MaelstromLauncher.Server.Services
         public string GameDirectoryPath { get; private set; }
         public string DataPath { get; private set; }
         public string ServerUrl { get; private set; }
-        public Manifest? Manifest { get; protected set; }
+
+        private Manifest? _manifest; // Threadsafe Manifest? in case of parallel reading or writing.
+        private readonly object _lockManifest = new();
+        public Manifest? Manifest
+        {
+            get
+            {
+                lock (_lockManifest)
+                {
+                    return _manifest;
+                }
+            }
+            set
+            {
+                lock (_lockManifest)
+                {
+                    _manifest = value;
+                }
+            }
+        }
 
         public ManifestService(IConfiguration configuration, FileHashService fileHashService)
         {
@@ -177,7 +197,7 @@ namespace MaelstromLauncher.Server.Services
                             Path = relativePath.Replace("/", "\\"),
                             Size = fileInfo.Length,
                             Hash = hash,
-                            Url = $"ServerURL" // TODO: Add server URLs
+                            Url = $"{ServerUrl}/{relativePath.Replace("\\", "/")}"
                         };
 
                         defaultManifest.Files.Add(fileEntry);
