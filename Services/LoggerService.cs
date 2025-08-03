@@ -1,6 +1,4 @@
-﻿using System.IO;
-
-namespace MaelstromLauncher.Server.Services
+﻿namespace MaelstromLauncher.Server.Services
 {
     public static class LoggerService
     {

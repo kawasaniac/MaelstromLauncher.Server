@@ -15,7 +15,7 @@ namespace MaelstromLauncher.Server.Models
     {
         [Required]
         public string Path { get; set; } = "";
-        [Range (0, long.MaxValue)]
+        [Range(0, long.MaxValue)]
         public long Size { get; set; }
         [Required]
         public string Hash { get; set; } = "";

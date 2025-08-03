@@ -1,6 +1,5 @@
 ﻿using MaelstromLauncher.Server.Globals;
 using MaelstromLauncher.Server.Models;
-using System;
 using System.Diagnostics;
 using System.Text;
 using System.Text.Json;
@@ -52,7 +51,7 @@ namespace MaelstromLauncher.Server.Services
             {
                 Directory.CreateDirectory(GameDirectoryPath);
                 Directory.CreateDirectory(DataPath);
-                
+
                 if (OperatingSystem.IsLinux())
                 {
                     SetLinuxPermissions(GameDirectoryPath, "755");
@@ -104,7 +103,7 @@ namespace MaelstromLauncher.Server.Services
             try
             {
                 var json = await File.ReadAllTextAsync(_manifestFilePath, Encoding.UTF8);
-                var manifest = JsonSerializer.Deserialize<Manifest>(json, GetJsonOptions());
+                var manifest = JsonSerializer.Deserialize<Manifest>(json, GetManifestJsonOptions());
 
                 if (string.IsNullOrWhiteSpace(json))
                 {
@@ -131,7 +130,7 @@ namespace MaelstromLauncher.Server.Services
 
             if (Manifest?.Version != null)
             {
-                newManifest.Version = Manifest.Version; 
+                newManifest.Version = Manifest.Version;
             }
 
             var files = new List<FileEntry>();
@@ -207,7 +206,7 @@ namespace MaelstromLauncher.Server.Services
                 await EnsureManifestExistsAsync();
 
                 var manifestDir = Path.GetDirectoryName(_manifestFilePath);
-                var json = JsonSerializer.Serialize(Manifest, GetJsonOptions());
+                var json = JsonSerializer.Serialize(Manifest, GetManifestJsonOptions());
 
                 if (!string.IsNullOrWhiteSpace(manifestDir))
                     Directory.CreateDirectory(manifestDir);
@@ -234,7 +233,7 @@ namespace MaelstromLauncher.Server.Services
             try
             {
                 var manifestDir = Path.GetDirectoryName(_manifestFilePath);
-                var json = JsonSerializer.Serialize(Manifest, GetJsonOptions());
+                var json = JsonSerializer.Serialize(Manifest, GetManifestJsonOptions());
 
                 if (!string.IsNullOrWhiteSpace(manifestDir))
                     Directory.CreateDirectory(manifestDir);
@@ -245,7 +244,7 @@ namespace MaelstromLauncher.Server.Services
             catch (Exception ex)
             {
                 LoggerService.Log(LogType.MANIFEST, LogType.ERROR, $"Failed to save manifest directly: {ex.Message}");
-                throw;            
+                throw;
             }
         }
 
@@ -300,7 +299,7 @@ namespace MaelstromLauncher.Server.Services
             return await EnsureManifestExistsAsync();
         }
 
-        public static JsonSerializerOptions GetJsonOptions()
+        private static JsonSerializerOptions GetManifestJsonOptions()
         {
             return new JsonSerializerOptions
             {
