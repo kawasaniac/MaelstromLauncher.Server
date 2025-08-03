@@ -77,11 +77,17 @@ namespace MaelstromLauncher.Server.Services
             }
         }
 
+        //
+        // We are explicitly overriding Dispose() method from BackgroundService for our purposes,
+        // so it's ok to leave it as is.
+        //
         public override void Dispose()
         {
             _fileSystemWatcher?.Dispose();
             _debounceTimer?.Dispose();
             base.Dispose();
+
+            GC.SuppressFinalize(this);
         }
     }
 }
