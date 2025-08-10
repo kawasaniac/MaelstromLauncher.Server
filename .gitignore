@@ -11,3 +11,4 @@ vs/
 *.cache
 server_log.txt
 wwwroot/
+data/
