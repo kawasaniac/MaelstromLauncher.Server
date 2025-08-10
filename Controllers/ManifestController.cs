@@ -3,15 +3,6 @@ using MaelstromLauncher.Server.Services;
 using MaelstromLauncher.Server.DTOs;
 using Microsoft.AspNetCore.Mvc;
 
-//
-// TODO:
-// 1) Server controller for getting manifest, manifest info (date when it was generated to check for updates)
-// 2) A controller to validate files against what's on the server's manifest
-// 3) A controller for returning which exact files were modified for partial downloads
-// 4) Logic wrapping all of this with proper cancellation/error handling
-// 5) OpenAPI documentation
-//
-
 namespace MaelstromLauncher.Server.Controllers
 {
     [ApiController]
