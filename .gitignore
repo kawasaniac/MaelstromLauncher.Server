@@ -10,3 +10,4 @@ vs/
 *.cache
 *.cache
 server_log.txt
+wwwroot/
