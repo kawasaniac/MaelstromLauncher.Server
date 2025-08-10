@@ -294,11 +294,6 @@ namespace MaelstromLauncher.Server.Services
             return Manifest!;
         }
 
-        public async Task<Manifest> GetManifestAsync()
-        {
-            return await EnsureManifestExistsAsync();
-        }
-
         private static JsonSerializerOptions GetManifestJsonOptions()
         {
             return new JsonSerializerOptions

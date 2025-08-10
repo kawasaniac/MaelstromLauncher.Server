@@ -36,12 +36,12 @@ namespace MaelstromLauncher.Server.Controllers
         [HttpGet("manifest")]
         [ProducesResponseType(typeof(ManifestDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> GetManifest()
+        public async Task<IActionResult> GetManifestAsync()
         {
             try
             {
                 LoggerService.Log(LogType.MANIFEST, LogType.INFORMATION, "Recieved API request to get manifest");
-                var manifest = await _manifestSerivce.GetManifestAsync();
+                var manifest = await _manifestSerivce.EnsureManifestExistsAsync();
 
                 if (manifest == null)
                 {
@@ -68,12 +68,12 @@ namespace MaelstromLauncher.Server.Controllers
         [HttpGet("manifestInfo")]
         [ProducesResponseType(typeof(ManifestInfoDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> GetManifestInfo()
+        public async Task<IActionResult> GetManifestInfoAsync()
         {
             try
             {
                 LoggerService.Log(LogType.MANIFEST, LogType.INFORMATION, "Recieved API request to get manifest metadata");
-                var manifest = await _manifestSerivce.GetManifestAsync();
+                var manifest = await _manifestSerivce.EnsureManifestExistsAsync();
 
                 if (manifest == null)
                 {
