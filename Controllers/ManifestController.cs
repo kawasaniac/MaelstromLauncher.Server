@@ -17,21 +17,13 @@ namespace MaelstromLauncher.Server.Controllers
     [ApiController]
     [Route("api/[controller]")]
     [Produces("application/json")]
-    public class ManifestController : ControllerBase
+    public class ManifestController(ManifestService manifestService, ILogger<ManifestController> logger) : ControllerBase
     {
-        private readonly ManifestService _manifestSerivce;
-        private readonly ILogger<ManifestController> _logger;
-
-        public ManifestController(ManifestService manifestService, ILogger<ManifestController> logger)
-        {
-            _manifestSerivce = manifestService;
-            _logger = logger;
-        }
 
         /// <summary>
         /// Gets the current game manifest
         /// </summary>
-        /// <returns>The current manifest with all file entries and header metadata (version, date, fileentry)</returns>
+        /// <returns>The current manifest with all file entries and header metadata (version, date, fileentry).</returns>
 
         [HttpGet("manifest")]
         [ProducesResponseType(typeof(ManifestDto), StatusCodes.Status200OK)]
@@ -41,7 +33,7 @@ namespace MaelstromLauncher.Server.Controllers
             try
             {
                 LoggerService.Log(LogType.MANIFEST, LogType.INFORMATION, "Recieved API request to get manifest");
-                var manifest = await _manifestSerivce.EnsureManifestExistsAsync();
+                var manifest = await manifestService.EnsureManifestExistsAsync();
 
                 if (manifest == null)
                 {
@@ -54,7 +46,7 @@ namespace MaelstromLauncher.Server.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error retrieving manifest");
+                logger.LogError(ex, "Error retrieving manifest");
                 LoggerService.Log(LogType.MANIFEST, LogType.ERROR, $"Manifest not found: {ex.Message}");
                 return Problem("Manifest could not be retrieved", statusCode: StatusCodes.Status500InternalServerError);
             }
@@ -63,7 +55,7 @@ namespace MaelstromLauncher.Server.Controllers
         /// <summary>
         /// Gets the current game manifest metadata
         /// </summary>
-        /// <returns>The current manifest manifest metadata, which includes version and time manifest was generated at</returns>
+        /// <returns>The current manifest manifest metadata, which includes version and time manifest was generated at.</returns>
 
         [HttpGet("manifestInfo")]
         [ProducesResponseType(typeof(ManifestInfoDto), StatusCodes.Status200OK)]
@@ -73,7 +65,7 @@ namespace MaelstromLauncher.Server.Controllers
             try
             {
                 LoggerService.Log(LogType.MANIFEST, LogType.INFORMATION, "Recieved API request to get manifest metadata");
-                var manifest = await _manifestSerivce.EnsureManifestExistsAsync();
+                var manifest = await manifestService.EnsureManifestExistsAsync();
 
                 if (manifest == null)
                 {
@@ -90,7 +82,7 @@ namespace MaelstromLauncher.Server.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error retrieving manifest metadata");
+                logger.LogError(ex, "Error retrieving manifest metadata");
                 LoggerService.Log(LogType.MANIFEST, LogType.ERROR, $"Failed to get manifest metadata: {ex.Message}");
                 return Problem("Manifest metadata could not be retrieved", statusCode: StatusCodes.Status500InternalServerError);
             }
