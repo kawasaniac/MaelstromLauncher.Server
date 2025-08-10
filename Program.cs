@@ -1,5 +1,4 @@
 using MaelstromLauncher.Server.Services;
-using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 
 namespace MaelstromLauncher.Server;
@@ -22,6 +21,7 @@ public class Program
 
         builder.Services.AddScoped<ManifestService>();
         builder.Services.AddHostedService<FileWatcherService>();
+
 
         var app = builder.Build();
 

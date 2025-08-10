@@ -65,8 +65,10 @@ namespace MaelstromLauncher.Server.Controllers
                     return Problem(errorMessagge, statusCode: StatusCodes.Status500InternalServerError);
                 }
 
-                var manifestInfo = new ManifestInfoDto();
-
+                var manifestInfo = new ManifestInfoDto()
+                {
+                    Version = manifest.Version
+                };
                 LoggerService.Log(LogType.MANIFEST, LogType.INFORMATION, $"Successfully retrieved manifest metadata with latest version from: {manifestInfo.GeneratedAt}");
 
                 return Ok(manifestInfo);

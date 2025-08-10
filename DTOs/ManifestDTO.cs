@@ -7,9 +7,9 @@ namespace MaelstromLauncher.Server.DTOs
     /// </summary>
     public class ManifestDto
     {
-        public string Version { get; set; }
+        public required string Version { get; set; }
         public DateTime GeneratedAt { get; set; }
-        public List<FileEntry> Files { get; set; }
+        public required List<FileEntry> Files { get; set; }
     }
 
     /// <summary>
@@ -17,10 +17,10 @@ namespace MaelstromLauncher.Server.DTOs
     /// </summary>
     public class FileEntryDto
     {
-        public string Path { get; set; }
+        public required string Path { get; set; }
         public long Size { get; set; }
-        public string Hash { get; set; }
-        public string Url { get; set; }
+        public required string Hash { get; set; }
+        public required string Url { get; set; }
     }
 
     /// <summary>
@@ -28,7 +28,7 @@ namespace MaelstromLauncher.Server.DTOs
     /// </summary>
     public class ManifestInfoDto
     {
-        public string Version { get; set; }
+        public required string Version { get; set; }
         public DateTime GeneratedAt { get; set; }
     }
 }
