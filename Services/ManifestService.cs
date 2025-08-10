@@ -173,7 +173,7 @@ namespace MaelstromLauncher.Server.Services
 
                     var fileEntry = new FileEntry()
                     {
-                        Path = relativeFilePath.Replace("/", "\\"),
+                        Path = relativeFilePath.Replace("\\", "/"),
                         Size = fileInfo.Length,
                         Hash = hash,
                         Url = downloadUrl
