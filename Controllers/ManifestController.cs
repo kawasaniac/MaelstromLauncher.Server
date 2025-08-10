@@ -1,81 +1,98 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using MaelstromLauncher.Server.Globals;
+using MaelstromLauncher.Server.Services;
+using MaelstromLauncher.Server.DTOs;
+using Microsoft.AspNetCore.Mvc;
+
+//
+// TODO:
+// 1) Server controller for getting manifest, manifest info (date when it was generated to check for updates)
+// 2) A controller to validate files against what's on the server's manifest
+// 3) A controller for returning which exact files were modified for partial downloads
+// 4) Logic wrapping all of this with proper cancellation/error handling
+// 5) OpenAPI documentation
+//
 
 namespace MaelstromLauncher.Server.Controllers
 {
-    public class ManifestController : Controller
+    [ApiController]
+    [Route("api/[controller]")]
+    [Produces("application/json")]
+    public class ManifestController : ControllerBase
     {
-        // GET: ManifestController
-        public ActionResult Index()
+        private readonly ManifestService _manifestSerivce;
+        private readonly ILogger<ManifestController> _logger;
+
+        public ManifestController(ManifestService manifestService, ILogger<ManifestController> logger)
         {
-            return View();
+            _manifestSerivce = manifestService;
+            _logger = logger;
         }
 
-        // GET: ManifestController/Details/5
-        public ActionResult Details(int id)
-        {
-            return View();
-        }
+        /// <summary>
+        /// Gets the current game manifest
+        /// </summary>
+        /// <returns>The current manifest with all file entries and header metadata (version, date, fileentry)</returns>
 
-        // GET: ManifestController/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: ManifestController/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        [HttpGet("manifest")]
+        [ProducesResponseType(typeof(ManifestDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> GetManifest()
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                LoggerService.Log(LogType.MANIFEST, LogType.INFORMATION, "Recieved API request to get manifest");
+                var manifest = await _manifestSerivce.GetManifestAsync();
+
+                if (manifest == null)
+                {
+                    var errorMessagge = "Manifest not found";
+                    LoggerService.Log(LogType.MANIFEST, LogType.ERROR, errorMessagge);
+                    return Problem(errorMessagge, statusCode: StatusCodes.Status500InternalServerError);
+                }
+
+                return Ok(manifest);
             }
-            catch
+            catch (Exception ex)
             {
-                return View();
+                _logger.LogError(ex, "Error retrieving manifest");
+                LoggerService.Log(LogType.MANIFEST, LogType.ERROR, $"Manifest not found: {ex.Message}");
+                return Problem("Manifest could not be retrieved", statusCode: StatusCodes.Status500InternalServerError);
             }
         }
 
-        // GET: ManifestController/Edit/5
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
+        /// <summary>
+        /// Gets the current game manifest metadata
+        /// </summary>
+        /// <returns>The current manifest manifest metadata, which includes version and time manifest was generated at</returns>
 
-        // POST: ManifestController/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: ManifestController/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: ManifestController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        [HttpGet("manifestInfo")]
+        [ProducesResponseType(typeof(ManifestInfoDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> GetManifestInfo()
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                LoggerService.Log(LogType.MANIFEST, LogType.INFORMATION, "Recieved API request to get manifest metadata");
+                var manifest = await _manifestSerivce.GetManifestAsync();
+
+                if (manifest == null)
+                {
+                    var errorMessagge = "Manifest not found";
+                    LoggerService.Log(LogType.MANIFEST, LogType.ERROR, errorMessagge);
+                    return Problem(errorMessagge, statusCode: StatusCodes.Status500InternalServerError);
+                }
+
+                var manifestInfo = new ManifestInfoDto();
+
+                LoggerService.Log(LogType.MANIFEST, LogType.INFORMATION, $"Successfully retrieved manifest metadata with latest version from: {manifestInfo.GeneratedAt}");
+
+                return Ok(manifestInfo);
             }
-            catch
+            catch (Exception ex)
             {
-                return View();
+                _logger.LogError(ex, "Error retrieving manifest metadata");
+                LoggerService.Log(LogType.MANIFEST, LogType.ERROR, $"Failed to get manifest metadata: {ex.Message}");
+                return Problem("Manifest metadata could not be retrieved", statusCode: StatusCodes.Status500InternalServerError);
             }
         }
     }
