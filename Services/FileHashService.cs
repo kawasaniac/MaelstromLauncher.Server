@@ -75,8 +75,10 @@ namespace MaelstromLauncher.Server.Services
             try
             {
                 var actualHash = await CalculateFileHashAsync(path);
+                var isValid = string.Equals(actualHash, correctHash);
+
                 LoggerService.Log(LogType.FILE_HASH, LogType.INFORMATION, $"Successfully verified hash for: {path}");
-                return string.Equals(actualHash, correctHash);
+                return isValid;
             }
             catch (Exception ex)
             {
