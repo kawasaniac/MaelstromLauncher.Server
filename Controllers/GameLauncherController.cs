@@ -4,11 +4,11 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace MaelstromLauncher.Server.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/game-launcher/[controller]")]
     [ApiController]
     public class GameLauncherController(GameLauncherService _gameLauncherService, ILogger<ManifestController> _logger) : ControllerBase
     {
-        [HttpGet("game-launcher")]
+        [HttpGet]
         [ProducesResponseType(typeof(FileResult), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]

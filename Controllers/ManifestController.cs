@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace MaelstromLauncher.Server.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/manifest/[controller]")]
     [Produces("application/json")]
     public class ManifestController(ManifestService manifestService, ILogger<ManifestController> logger) : ControllerBase
     {
@@ -16,7 +16,7 @@ namespace MaelstromLauncher.Server.Controllers
         /// </summary>
         /// <returns>The current manifest with all file entries and header metadata (version, date, fileentry).</returns>
 
-        [HttpGet("manifest")]
+        [HttpGet]
         [ProducesResponseType(typeof(ManifestDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetManifestAsync()
@@ -48,7 +48,7 @@ namespace MaelstromLauncher.Server.Controllers
         /// </summary>
         /// <returns>The current manifest manifest metadata, which includes version and time manifest was generated at.</returns>
 
-        [HttpGet("manifestInfo")]
+        [HttpGet("info")]
         [ProducesResponseType(typeof(ManifestInfoDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetManifestInfoAsync()
