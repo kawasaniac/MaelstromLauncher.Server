@@ -13,7 +13,6 @@ public class Program
         ValidateConfiguration(builder.Configuration);
 
         builder.Services.AddControllers();
-        // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen(c =>
         {
@@ -21,6 +20,7 @@ public class Program
         });
 
         builder.Services.AddScoped<ManifestService>();
+        builder.Services.AddScoped<GameLauncherService>();
         builder.Services.AddHostedService<FileWatcherService>();
 
         var app = builder.Build();
