@@ -9,4 +9,3 @@
         public DateTime GeneratedAt { get; set; }
     }
 }
-}
