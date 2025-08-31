@@ -1,6 +1,17 @@
 @MaelstromLauncher.Server_HostAddress = http://localhost:5183
 
-GET {{MaelstromLauncher.Server_HostAddress}}/manifest/
+// Gets the current game manifest with all file entries and metadata
+GET {{MaelstromLauncher.Server_HostAddress}}/api/manifest/manifest
 Accept: application/json
 
-###
+// Gets the current game manifest metadata
+GET {{MaelstromLauncher.Server_HostAddress}}/api/manifest/manifest/info
+Accept: application/json
+
+// Downloads the game launcher file
+GET {{MaelstromLauncher.Server_HostAddress}}/api/game-launcher/gamelaucher
+Accept: application/octet-stream
+
+// Gets the status of the game launcher file
+GET {{MaelstromLauncher.Server_HostAddress}}/api/game-launcher/gamelaucher/status
+Accept: application/json
