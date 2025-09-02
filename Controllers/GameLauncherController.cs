@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace MaelstromLauncher.Server.Controllers
 {
-    [Route("api/game-launcher/[controller]")]
+    [Route("api/[controller]")]
     [ApiController]
     public class GameLauncherController(GameLauncherService _gameLauncherService, ILogger<ManifestController> _logger) : ControllerBase
     {

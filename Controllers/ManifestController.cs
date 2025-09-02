@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace MaelstromLauncher.Server.Controllers
 {
     [ApiController]
-    [Route("api/manifest/[controller]")]
+    [Route("api/[controller]")]
     [Produces("application/json")]
     public class ManifestController(ManifestService manifestService, ILogger<ManifestController> logger) : ControllerBase
     {

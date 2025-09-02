@@ -15,7 +15,7 @@ namespace MaelstromLauncher.Server.Services
         {
             _environment = environment;
             _configuration = configuration;
-            _launcherFileName = _configuration["GameLauncher:FileName"] ?? "GameLauncher.exe";
+            _launcherFileName = _configuration["GameLauncher:FileName"] ?? "Arctium Game Launcher.exe";
             _launcherPath = Path.Combine(_environment.WebRootPath, _launcherFileName); ;
         }
 
