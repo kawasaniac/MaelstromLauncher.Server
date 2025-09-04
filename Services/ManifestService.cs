@@ -38,7 +38,7 @@ namespace MaelstromLauncher.Server.Services
         public ManifestService(IConfiguration configuration, IServerUrlProvider serverUrlProvider)
         {
             GameDirectoryPath = configuration["GameDirectory:Path"] ?? "/opt/maelstrom-launcher/files";
-            DataPath = configuration["DataDirectory:Path"] ?? "/var/lib/maelstrom-launcher/";
+            DataPath = configuration["DataDirectory:Path"] ?? "/opt/maelstrom-launcher/data";
 
             _manifestFilePath = Path.Combine(DataPath, "manifest.json");
             _serverUrlProvider = serverUrlProvider;
