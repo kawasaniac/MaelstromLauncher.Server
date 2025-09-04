@@ -1,4 +1,5 @@
 ﻿using MaelstromLauncher.Server.Globals;
+using MaelstromLauncher.Server.Helpers;
 using MaelstromLauncher.Server.Models;
 using System.Diagnostics;
 using System.Text;
@@ -9,10 +10,10 @@ namespace MaelstromLauncher.Server.Services
 {
     public class ManifestService
     {
+        private readonly IServerUrlProvider _serverUrlProvider;
         private readonly string _manifestFilePath;
         public string GameDirectoryPath { get; private set; }
         public string DataPath { get; private set; }
-        public string ServerUrl { get; private set; }
 
         private Manifest? _manifest; // Threadsafe Manifest? in case of parallel reading or writing.
         private readonly object _lockManifest = new();
@@ -34,13 +35,13 @@ namespace MaelstromLauncher.Server.Services
             }
         }
 
-        public ManifestService(IConfiguration configuration)
+        public ManifestService(IConfiguration configuration, IServerUrlProvider serverUrlProvider)
         {
             GameDirectoryPath = configuration["GameDirectory:Path"] ?? "/opt/maelstrom-launcher/files";
             DataPath = configuration["DataDirectory:Path"] ?? "/var/lib/maelstrom-launcher/";
-            ServerUrl = configuration["Server:ServerUrl"] ?? "http://localhost:5000";
 
             _manifestFilePath = Path.Combine(DataPath, "manifest.json");
+            _serverUrlProvider = serverUrlProvider;
 
             ValidateDirectory();
         }
@@ -169,7 +170,9 @@ namespace MaelstromLauncher.Server.Services
 
                     var fileInfo = new FileInfo(filePath);
                     var hash = await FileHashService.CalculateFileHashAsync(filePath);
-                    var downloadUrl = $"{ServerUrl}/{relativeFilePath.Replace("\\", "/")}";
+
+                    var serverUrl = _serverUrlProvider.GetServerUrl();
+                    var downloadUrl = $"{serverUrl}/{relativeFilePath.Replace("\\", "/")}";
 
                     var fileEntry = new FileEntry()
                     {
