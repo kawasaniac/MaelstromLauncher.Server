@@ -4,19 +4,16 @@ namespace MaelstromLauncher.Server.Services
 {
     public class GameLauncherService
     {
-        private readonly IWebHostEnvironment _environment;
         private readonly IConfiguration _configuration;
         private readonly string _launcherFileName;
         private readonly string _launcherPath;
 
         public GameLauncherService(
-            IWebHostEnvironment environment,
             IConfiguration configuration)
         {
-            _environment = environment;
             _configuration = configuration;
             _launcherFileName = _configuration["GameLauncher:FileName"] ?? "Arctium Game Launcher.exe";
-            _launcherPath = Path.Combine(_environment.WebRootPath, _launcherFileName); ;
+            _launcherPath = Path.Combine(configuration["GameDirectory:Path"] ?? "/opt/maelstrom-launcher/files", _launcherFileName);
         }
 
         public async Task<FileStream?> GetGameLauncherStreamAsync()

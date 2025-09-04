@@ -9,8 +9,8 @@ public class Program
     public static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
-
-        ValidateConfiguration(builder.Configuration);
+        
+        //ValidateConfiguration(builder.Configuration);
 
         builder.Services.AddControllers();
         builder.Services.AddEndpointsApiExplorer();
@@ -34,21 +34,25 @@ public class Program
             app.UseSwaggerUI();
         }
 
-        app.UseHttpsRedirection();
+        //app.UseHttpsRedirection(); TODO: Enable when we will have HTTPS
         app.UseAuthorization();
         app.MapControllers();
         app.Run();
     }
 
+    /*
     static void ValidateConfiguration(ConfigurationManager configuration)
     {
-        var requiredSettings = new[] { "GameDirectory:Path", "DataDirectory:Path" };
+        var requiredSettings = new[] { 
+            configuration["GameDirectory:Path"] ?? "/opt/maelstrom-launcher/files",
+            configuration["DataDirectory:Path"] ?? "/opt/maelstrom-launcher/data" };
+
         foreach (var setting in requiredSettings)
         {
             if (string.IsNullOrEmpty(configuration[setting]))
                 throw new InvalidOperationException($"Required configuration {setting} is missing");
         }
-    }
+    }*/
 }
 
 
