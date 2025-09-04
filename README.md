@@ -31,5 +31,5 @@ Also featuring a [fully custom WPF game launcher](https://github.com/Cenatm/Mael
 
 * Available runtime identifiers/platforms: win-x64/x64 (Any CPU)
 * Available release configurations: Release, Debug
-* Execute `dotnet build MaelstromLauncher.Server.sln -c Release -p:Platform="Any CPU"`
+* Execute `dotnet build MaelstromLauncher.Server.sln -c Release -p:Platform="Any CPU"` or `dotnet publish MaelstromLauncher.Server.sln -c Release -r linux-x64 /p:SelfContained=true`
 * Output is placed in `bin\Release\net8.0-windows\`
