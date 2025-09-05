@@ -67,7 +67,8 @@ namespace MaelstromLauncher.Server.Controllers
 
                 var manifestInfo = new ManifestInfoDto()
                 {
-                    Version = manifest.Version
+                    Version = manifest.Version,
+                    GeneratedAt = manifest.GeneratedAt
                 };
                 LoggerService.Log(LogType.MANIFEST, LogType.INFORMATION, $"Successfully retrieved manifest metadata with latest version from: {manifestInfo.GeneratedAt}");
 
