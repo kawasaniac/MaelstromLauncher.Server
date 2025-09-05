@@ -1,6 +1,6 @@
-﻿using MaelstromLauncher.Server.Globals;
+﻿using MaelstromLauncher.Server.DTOs;
+using MaelstromLauncher.Server.Globals;
 using MaelstromLauncher.Server.Services;
-using MaelstromLauncher.Server.DTOs;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MaelstromLauncher.Server.Controllers
@@ -34,7 +34,12 @@ namespace MaelstromLauncher.Server.Controllers
                 }
 
                 var manifestPath = Path.Combine(manifestService.DataPath, "manifest.json");
-                return new FileStreamResult(new FileStream(manifestPath, FileMode.Open, FileAccess.Read, FileShare.Read, bufferSize: 4096, useAsync: true), "application/json")
+                return new FileStreamResult(new FileStream(
+                        manifestPath, FileMode.Open,
+                        FileAccess.Read, FileShare.Read,
+                        bufferSize: 8096,
+                        useAsync: true),
+                        "application/json")
                 {
                     FileDownloadName = "manifest.json"
                 };
