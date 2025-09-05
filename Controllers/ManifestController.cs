@@ -15,7 +15,6 @@ namespace MaelstromLauncher.Server.Controllers
         /// Gets the current game manifest
         /// </summary>
         /// <returns>The current manifest with all file entries and header metadata (version, date, fileentry).</returns>
-
         [HttpGet]
         [ProducesResponseType(typeof(ManifestDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]

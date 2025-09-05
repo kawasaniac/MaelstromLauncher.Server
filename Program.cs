@@ -1,5 +1,6 @@
 using MaelstromLauncher.Server.Helpers;
 using MaelstromLauncher.Server.Services;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.OpenApi.Models;
 
 namespace MaelstromLauncher.Server;
@@ -10,7 +11,7 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
         
-        //ValidateConfiguration(builder.Configuration);
+        ValidateConfiguration(builder.Configuration);
 
         builder.Services.AddControllers();
         builder.Services.AddEndpointsApiExplorer();
@@ -24,6 +25,12 @@ public class Program
         builder.Services.AddHttpContextAccessor();
         builder.Services.AddScoped<IServerUrlProvider, ServerUrlProvider>();
         builder.Services.AddHostedService<FileWatcherService>();
+
+        builder.Services.Configure<KestrelServerOptions>(options =>
+        {
+            options.Limits.RequestHeadersTimeout = TimeSpan.FromMinutes(30); // Header timeout
+            options.Limits.KeepAliveTimeout = TimeSpan.FromMinutes(10); // Keep-alive timeout
+        });
 
         var app = builder.Build();
 
@@ -40,19 +47,21 @@ public class Program
         app.Run();
     }
 
-    /*
     static void ValidateConfiguration(ConfigurationManager configuration)
     {
-        var requiredSettings = new[] { 
-            configuration["GameDirectory:Path"] ?? "/opt/maelstrom-launcher/files",
-            configuration["DataDirectory:Path"] ?? "/opt/maelstrom-launcher/data" };
-
-        foreach (var setting in requiredSettings)
+        var requiredSettings = new (string Key, string DefaultValue)[]
         {
-            if (string.IsNullOrEmpty(configuration[setting]))
-                throw new InvalidOperationException($"Required configuration {setting} is missing");
+        ("GameDirectory:Path", "/opt/maelstrom-launcher/files"),
+        ("DataDirectory:Path", "/opt/maelstrom-launcher/data")
+        };
+
+        foreach (var (key, defaultValue) in requiredSettings)
+        {
+            var value = configuration[key] ?? defaultValue;
+            if (string.IsNullOrEmpty(value))
+                throw new InvalidOperationException($"Required configuration '{key}' is missing");
         }
-    }*/
+    }
 }
 
 
