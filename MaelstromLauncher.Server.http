@@ -7,8 +7,8 @@ Accept: application/json
 GET {{MaelstromLauncher.Server_HostAddress}}/api/manifest/info
 Accept: application/json
 
-GET {{MaelstromLauncher.Server_HostAddress}}/api/gamelaucher
+GET {{MaelstromLauncher.Server_HostAddress}}/api/gamelauncher
 Accept: application/octet-stream
 
-GET {{MaelstromLauncher.Server_HostAddress}}/api/gamelaucher/status
+GET {{MaelstromLauncher.Server_HostAddress}}/api/gamelauncher/status
 Accept: application/json
