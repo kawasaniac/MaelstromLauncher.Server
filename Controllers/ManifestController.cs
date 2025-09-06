@@ -22,26 +22,17 @@ namespace MaelstromLauncher.Server.Controllers
         {
             try
             {
-                LoggerService.Log(LogType.MANIFEST, LogType.INFORMATION, "Received API request to get manifest");
+                LoggerService.Log(LogType.MANIFEST, LogType.INFORMATION, "Recieved API request to get manifest");
                 var manifest = await manifestService.EnsureManifestExistsAsync();
 
                 if (manifest == null)
                 {
-                    var errorMessage = "Manifest not found";
-                    LoggerService.Log(LogType.MANIFEST, LogType.ERROR, errorMessage);
-                    return Problem(errorMessage, statusCode: StatusCodes.Status500InternalServerError);
+                    var errorMessagge = "Manifest not found";
+                    LoggerService.Log(LogType.MANIFEST, LogType.ERROR, errorMessagge);
+                    return Problem(errorMessagge, statusCode: StatusCodes.Status500InternalServerError);
                 }
 
-                var manifestPath = Path.Combine(manifestService.DataPath, "manifest.json");
-                return new FileStreamResult(new FileStream(
-                        manifestPath, FileMode.Open,
-                        FileAccess.Read, FileShare.Read,
-                        bufferSize: 8096,
-                        useAsync: true),
-                        "application/json")
-                {
-                    FileDownloadName = "manifest.json"
-                };
+                return Ok(manifest);
             }
             catch (Exception ex)
             {
