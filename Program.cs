@@ -42,7 +42,15 @@ public class Program
         }
 
         //app.UseHttpsRedirection(); TODO: Enable when we will have HTTPS
-        app.UseStaticFiles();
+        app.UseStaticFiles(new StaticFileOptions
+        {
+            ServeUnknownFileTypes = true,
+            OnPrepareResponse = ctx =>
+            {
+                ctx.Context.Response.Headers.Append("Accept-Ranges", "bytes");
+            }
+        });
+
         app.UseAuthorization();
         app.MapControllers();
         app.Run();
