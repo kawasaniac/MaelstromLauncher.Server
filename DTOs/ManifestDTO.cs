@@ -9,6 +9,6 @@ namespace MaelstromLauncher.Server.DTOs
     {
         public required string Version { get; set; }
         public DateTime GeneratedAt { get; set; }
-        public required List<FileEntry> Files { get; set; }
+        public required List<FileEntryDto> Files { get; set; }
     }
 }
