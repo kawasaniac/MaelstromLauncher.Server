@@ -29,7 +29,7 @@ namespace MaelstromLauncher.Server.Controllers
                 var fileName = _gameLauncherService.GetLauncherFileName();
                 LoggerService.Log(LogType.MAIN, LogType.INFORMATION, $"Serving game launcher download: {fileName}");
 
-                return File(fileStream, "application/octet-stream", fileName);
+                return File(fileStream, "application/octet-stream", fileName, enableRangeProcessing: true);
             }
             catch (Exception ex)
             {

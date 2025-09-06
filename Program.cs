@@ -42,6 +42,7 @@ public class Program
         }
 
         //app.UseHttpsRedirection(); TODO: Enable when we will have HTTPS
+        app.UseStaticFiles();
         app.UseAuthorization();
         app.MapControllers();
         app.Run();
