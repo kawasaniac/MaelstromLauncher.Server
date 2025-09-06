@@ -17,28 +17,31 @@ namespace MaelstromLauncher.Server.Controllers
         /// <returns>The current manifest with all file entries and header metadata (version, date, fileentry).</returns>
         [HttpGet]
         [ProducesResponseType(typeof(ManifestDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetManifestAsync()
         {
             try
             {
-                LoggerService.Log(LogType.MANIFEST, LogType.INFORMATION, "Recieved API request to get manifest");
+                LoggerService.Log(LogType.MANIFEST, LogType.INFORMATION, "Received API request to get manifest");
+
                 var manifest = await manifestService.EnsureManifestExistsAsync();
 
                 if (manifest == null)
                 {
-                    var errorMessagge = "Manifest not found";
-                    LoggerService.Log(LogType.MANIFEST, LogType.ERROR, errorMessagge);
-                    return Problem(errorMessagge, statusCode: StatusCodes.Status500InternalServerError);
+                    const string errorMessage = "Manifest not found";
+                    LoggerService.Log(LogType.MANIFEST, LogType.ERROR, errorMessage);
+                    return NotFound(errorMessage);
                 }
 
                 return Ok(manifest);
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, "Error retrieving manifest");
-                LoggerService.Log(LogType.MANIFEST, LogType.ERROR, $"Manifest not found: {ex.Message}");
-                return Problem("Manifest could not be retrieved", statusCode: StatusCodes.Status500InternalServerError);
+                const string errorMessage = "Manifest could not be retrieved";
+                LoggerService.Log(LogType.MANIFEST, LogType.ERROR, $"{errorMessage}: {ex.Message}");
+                logger.LogError(ex, errorMessage);
+                return Problem(errorMessage, statusCode: StatusCodes.Status500InternalServerError);
             }
         }
 
