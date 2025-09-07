@@ -34,14 +34,12 @@ public class Program
 
         var app = builder.Build();
 
-        // HTTP request pipeline.
         if (app.Environment.IsDevelopment())
         {
             app.UseSwagger();
             app.UseSwaggerUI();
         }
 
-        //app.UseHttpsRedirection(); TODO: Enable when we will have HTTPS
         app.UseStaticFiles(new StaticFileOptions
         {
             ServeUnknownFileTypes = true,
@@ -51,6 +49,7 @@ public class Program
             }
         });
 
+        //app.UseHttpsRedirection(); TODO: Enable when we will have HTTPS
         app.UseAuthorization();
         app.MapControllers();
         app.Run();
