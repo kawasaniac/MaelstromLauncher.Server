@@ -11,7 +11,7 @@ Also featuring a [fully custom WPF game launcher](https://github.com/Cenatm/Mael
 
 ## Features
 
-- Custom .
+- Custom ASP.NET Core backend server with proper safety features and error hadnling.
 - Comprehensive file download, serving & validation logic.
 - QoL feature set for keeping game up to date and shipped on the client.
 - Efficient manifest.json operations for serving files and handling files on the backend.
