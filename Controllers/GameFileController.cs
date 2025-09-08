@@ -42,7 +42,6 @@ namespace MaelstromLauncher.Server.Controllers
             }
 
             var fullPath = Path.Combine(gameDirectory, filePath);
-
             var gameDirectoryInfo = new DirectoryInfo(gameDirectory);
             var fileInfo = new FileInfo(fullPath);
 
@@ -77,14 +76,7 @@ namespace MaelstromLauncher.Server.Controllers
                 useAsync: true
             );
 
-            // Wraping here in a stream copy to memory to avoid blocking on synchronous operations
-            var memoryStream = new MemoryStream();
-            await fileStream.CopyToAsync(memoryStream);
-            memoryStream.Position = 0;
-            await fileStream.DisposeAsync();
-
-            return File(memoryStream, contentType, fileName, enableRangeProcessing: true);
+            return File(fileStream, contentType, fileName, enableRangeProcessing: true);
         }
-
     }
 }
