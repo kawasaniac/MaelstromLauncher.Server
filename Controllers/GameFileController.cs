@@ -16,7 +16,7 @@ namespace MaelstromLauncher.Server.Controllers
         [ProducesResponseType(typeof(FileResult), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> DownloadFileAsync(string filePath)
+        public IActionResult DownloadFile(string filePath)
         {
             if (string.IsNullOrWhiteSpace(filePath))
             {
