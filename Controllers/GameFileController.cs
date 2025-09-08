@@ -12,7 +12,7 @@ namespace MaelstromLauncher.Server.Controllers
         private readonly IConfiguration _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
         private readonly FileExtensionContentTypeProvider _contentTypeProvider = new();
 
-        [HttpGet("{**filePath}")]
+        [HttpGet]
         [ProducesResponseType(typeof(FileResult), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -25,8 +25,11 @@ namespace MaelstromLauncher.Server.Controllers
                 return BadRequest(new { message = errorMessage });
             }
 
+            // Normalize the path
             filePath = filePath.Replace('\\', '/').Trim('/');
-            if (filePath.Contains("..") || Path.IsPathRooted(filePath))
+
+            // Security check for directory traversal
+            if (filePath.Contains(".."))
             {
                 const string errorMessage = "Invalid file path";
                 LoggerService.Log(LogType.MAIN, LogType.ERROR, $"Potential directory traversal attempt: {filePath}");
@@ -41,15 +44,17 @@ namespace MaelstromLauncher.Server.Controllers
                 return Problem(errorMessage, statusCode: StatusCodes.Status500InternalServerError);
             }
 
-            var fullPath = Path.Combine(gameDirectory, filePath);
-            var gameDirectoryInfo = new DirectoryInfo(gameDirectory);
-            var fileInfo = new FileInfo(fullPath);
-
-            if (!fileInfo.FullName.StartsWith(gameDirectoryInfo.FullName, StringComparison.OrdinalIgnoreCase))
+            // Ensure the requested path starts with the allowed game directory
+            var normalizedGameDirectory = gameDirectory.Replace('\\', '/').Trim('/');
+            if (!filePath.StartsWith(normalizedGameDirectory, StringComparison.OrdinalIgnoreCase))
             {
-                LoggerService.Log(LogType.MAIN, LogType.ERROR, $"Path traversal blocked: {filePath}");
-                return Forbid();
+                LoggerService.Log(LogType.MAIN, LogType.ERROR, $"Access denied - path outside game directory: {filePath}");
+                return Forbid("Access denied - path outside allowed directory");
             }
+
+            // Convert to absolute path for file system access
+            var fullPath = $"/{filePath}";
+            var fileInfo = new FileInfo(fullPath);
 
             if (!fileInfo.Exists)
             {
