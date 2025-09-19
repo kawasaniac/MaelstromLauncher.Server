@@ -44,12 +44,18 @@ public class Program
         var gameDirectory = builder.Configuration["GameDirectory:Path"];
         if (!string.IsNullOrEmpty(gameDirectory))
         {
+            // Ensure absolute path
+            if (!Path.IsPathRooted(gameDirectory))
+            {
+                gameDirectory = Path.Combine(builder.Environment.ContentRootPath, gameDirectory);
+            }
+
             var fileProvider = new PhysicalFileProvider(gameDirectory);
 
             app.UseStaticFiles(new StaticFileOptions
             {
                 FileProvider = fileProvider,
-                RequestPath = "", // Serve at root, so /Interface/... works
+                RequestPath = "",
                 ServeUnknownFileTypes = true,
                 OnPrepareResponse = ctx =>
                 {
@@ -57,7 +63,6 @@ public class Program
                 }
             });
 
-            // Enable directory browsing
             app.UseDirectoryBrowser(new DirectoryBrowserOptions
             {
                 FileProvider = fileProvider,
