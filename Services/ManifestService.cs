@@ -171,7 +171,7 @@ namespace MaelstromLauncher.Server.Services
                     var fileInfo = new FileInfo(filePath);
                     var hash = await FileHashService.CalculateFileHashAsync(filePath);
 
-                    var serverUrl = _serverUrlProvider.GetServerUrl();
+                    var serverUrl = Settings.STATIC_SERVER_URL;
                     var downloadUrl = $"{serverUrl}/{relativeFilePath.Replace("\\", "/")}";
 
                     var fileEntry = new FileEntry()
