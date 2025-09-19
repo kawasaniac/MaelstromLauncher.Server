@@ -14,6 +14,8 @@ public class Program
 
         ValidateConfiguration(builder.Configuration);
 
+        builder.Logging.SetMinimumLevel(LogLevel.Debug); // TEMP
+
         builder.Services.AddControllers();
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen(c =>
